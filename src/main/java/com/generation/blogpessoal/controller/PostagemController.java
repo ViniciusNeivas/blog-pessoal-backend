@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.generation.blogpessoal.model.Postagem;
 import com.generation.blogpessoal.repository.PostagemRepository;
+import com.generation.blogpessoal.repository.TemaRepository;
 
 @RestController
 @RequestMapping("/postagens")
@@ -27,6 +28,10 @@ public class PostagemController {
 
 	@Autowired
 	private PostagemRepository postagemRepository;
+	// Segunda Injeção de dependencia
+
+	@Autowired
+	private TemaRepository temaRepository;
 
 	@GetMapping
 	public ResponseEntity<List<Postagem>> getAll() {
@@ -57,38 +62,71 @@ public class PostagemController {
 	@PostMapping
 	public ResponseEntity<Postagem> postPostagem(@Valid @RequestBody Postagem postagem) {
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
+		if (postagemRepository.existsById(postagem.getTema().getId()))
+			return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
 
-		// Insert
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
 	}
-	/* Primeira forma de fazer
-	 @PutMapping
-	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem){
- 	return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
-	return ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
-	 Insert
-	}*/
+
+	// if (temaRepository.existsById(postagem.getTema().getId()));{
+	// return
+	// ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
+
+	// Insert
+
+	/*
+	 * Primeira forma de fazer
+	 * 
+	 * @PutMapping public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody
+	 * Postagem postagem){ return
+	 * ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
+	 * return
+	 * ResponseEntity.status(HttpStatus.OK).body(postagemRepository.save(postagem));
+	 * Insert }
+	 */
 
 	@PutMapping
 	public ResponseEntity<Postagem> putPostagem(@Valid @RequestBody Postagem postagem) {
-		return postagemRepository.findById(postagem.getId())
-				.map(resposta -> ResponseEntity.ok().body(postagemRepository.save(postagem)))
-				.orElse(ResponseEntity.notFound().build());
+		
+		if (postagemRepository.existsById(postagem.getId())) {
+			
+			if (temaRepository.existsById(postagem.getTema().getId()))
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(postagemRepository.save(postagem));
+	
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
-
+		
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();       
+			
+	}
+		/*if (postagemRepository.existsById(postagem.getId())) {
+			if (temaRepository.existsById(postagem.getId()))
+				return ResponseEntity.status(HttpStatus.OK)
+						.body(postagemRepository.save(postagem));*/
+	// return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	//			.body(postagemRepository.save(postagem));}
+					
+						
+		//return postagemRepository.findById(postagem.getId())
+		//	.map(resposta -> ResponseEntity.ok().body(postagemRepository.save(postagem)))
+			//	.orElse(ResponseEntity.notFound().build());
+	
+		
 	/*Primeira forma de fazer
 	 @DeleteMapping("/{id}")
 	public void deletePostagem(@PathVariable Long id) {
 		postagemRepository.deleteById(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(postagemRepository.saveAll(id));
 	}*/
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletePostagem(@PathVariable Long id) {
-		return postagemRepository.findById(id)
-			.map(resposta -> {postagemRepository.deleteById(id);
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();})
-			.orElse(ResponseEntity.notFound().build());
+		return postagemRepository.findById(id).map(resposta -> {
+			postagemRepository.deleteById(id);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		}).orElse(ResponseEntity.notFound().build());
 	}
 
 }
