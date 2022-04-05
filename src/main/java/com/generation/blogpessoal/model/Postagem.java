@@ -1,6 +1,7 @@
 package com.generation.blogpessoal.model;
 
 import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +10,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
 import org.hibernate.annotations.UpdateTimestamp;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 	@Entity
@@ -35,6 +38,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 		@JsonIgnoreProperties ("postagem")
 		private Tema tema;
 
+		@ManyToOne
+		@JsonIgnoreProperties ("postagem")
+		private Usuario usuario;
 		
 		// Getter e Setter
 		
@@ -76,6 +82,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 		public void setData(LocalDateTime data) {
 			this.data = data;
+		}
+
+		public Usuario getUsuario() {
+			return usuario;
+		}
+
+		public void setUsuario(Usuario usuario) {
+			this.usuario = usuario;
 		}
 		
 		
