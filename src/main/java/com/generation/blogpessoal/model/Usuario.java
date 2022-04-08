@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "tb_usuario")
+@Table(name = "tb_usuarios")
 public class Usuario {
 
 	
@@ -27,7 +27,6 @@ public class Usuario {
 
 	
 	@NotNull(message = "O nome é obrigatório")
-	@Size(min = 5, max = 100, message = "O nome deve ter entre 5 e 100 caracteres")
 	private String nome;
 
 	
@@ -48,10 +47,23 @@ public class Usuario {
 	@JsonIgnoreProperties ("usuario")
 	private List <Postagem> postagem;
 
+
+	public Usuario(Long id, String nome, String usuario, String senha, String foto) {
+		
+		this.id = id;
+		this.nome = nome;
+		this.usuario = usuario;
+		this.senha = senha;
+		this.foto = foto;
+	}
+
+public Usuario() { }
+	
 	
 	
 	// GETTER AND SETTER
 	
+
 	public Long getId() {
 		return id;
 	}

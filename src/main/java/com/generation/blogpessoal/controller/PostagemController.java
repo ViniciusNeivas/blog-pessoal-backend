@@ -28,6 +28,7 @@ public class PostagemController {
 
 	@Autowired
 	private PostagemRepository postagemRepository;
+	
 	// Segunda Injeção de dependencia
 
 	@Autowired
@@ -45,8 +46,10 @@ public class PostagemController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Postagem> getById(@PathVariable Long id) {
 
-		return postagemRepository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
+		return postagemRepository.findById(id)
+				.map(resposta -> ResponseEntity.ok(resposta))
 				.orElse(ResponseEntity.notFound().build());
+		
 		// SELECT * FROM tb_postagens;
 		// lambda
 
@@ -62,7 +65,7 @@ public class PostagemController {
 	@PostMapping
 	public ResponseEntity<Postagem> postPostagem(@Valid @RequestBody Postagem postagem) {
 
-		if (postagemRepository.existsById(postagem.getTema().getId()))
+		if (temaRepository.existsById(postagem.getTema().getId()))
 			return ResponseEntity.status(HttpStatus.CREATED).body(postagemRepository.save(postagem));
 
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -123,10 +126,12 @@ public class PostagemController {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletePostagem(@PathVariable Long id) {
-		return postagemRepository.findById(id).map(resposta -> {
+		return postagemRepository.findById(id)
+				.map(resposta -> {
 			postagemRepository.deleteById(id);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		}).orElse(ResponseEntity.notFound().build());
+		})
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 }

@@ -54,7 +54,7 @@ public class UsuarioController {
 
 		return usuarioService.autenticarUsuario(usuarioLogin)
 
-				.map(resposta -> ResponseEntity.ok(resposta))
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
 				.orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
 
 	}

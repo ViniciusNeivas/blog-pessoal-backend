@@ -25,11 +25,11 @@ import com.generation.blogpessoal.repository.TemaRepository;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TemaController {
 
-	
 
 	@Autowired
 	private TemaRepository temaRepository;
 
+	
 	@GetMapping
 	public ResponseEntity<List<Tema>> getAll() {
 		
@@ -60,18 +60,20 @@ public class TemaController {
 	@PutMapping
 	public ResponseEntity<Tema> putTema(@Valid @RequestBody Tema tema) {
 
-		return temaRepository.findById(tema.getId()).map(resposta -> {
-			return ResponseEntity.ok().body(temaRepository.save(tema));
-		}).orElse(ResponseEntity.notFound().build());
+		return temaRepository.findById (tema.getId())
+				.map(resposta ->  ResponseEntity.ok().body(temaRepository.save(tema)))
+				.orElse(ResponseEntity.notFound().build());
 
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deletePostagem(@PathVariable Long id) {
-		return temaRepository.findById(id).map(resposta -> {
+		return temaRepository.findById(id)
+				.map(resposta -> {
 			temaRepository.deleteById(id);
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-		}).orElse(ResponseEntity.notFound().build());
+		})
+				.orElse(ResponseEntity.notFound().build());
 	}
 
 }
