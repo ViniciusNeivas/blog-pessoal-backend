@@ -45,7 +45,8 @@ public class UsuarioController {
 
 		return usuarioRepository.findById(id)
 
-				.map(resposta -> ResponseEntity.ok(resposta)).orElse(ResponseEntity.notFound().build());
+				.map(resposta -> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.notFound().build());
 
 	}
 
@@ -60,7 +61,7 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/cadastrar")
-	public ResponseEntity<Usuario> postUsuario(@RequestBody @Valid Usuario usuario) {
+	public ResponseEntity<Usuario> postUsuario(@Valid @RequestBody Usuario usuario) {
 
 		return usuarioService.cadastrarUsuario(usuario)
 

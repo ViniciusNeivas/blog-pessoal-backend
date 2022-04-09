@@ -51,7 +51,7 @@ public class UsuarioRepositoryTest {
 	}
 
 	@Test
-	@DisplayName("✨Retorna 3 usuarios")
+	@DisplayName("Retorna 3 usuarios")
 	public void deveRetornarTresUsuarios() { // Bater o olho e saber qual o teste.
 
 		List<Usuario> listaDeUsuarios = usuarioRepository.findAllByNomeContainingIgnoreCase("Silva");

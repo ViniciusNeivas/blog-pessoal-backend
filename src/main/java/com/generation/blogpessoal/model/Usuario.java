@@ -11,7 +11,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,11 +25,12 @@ public class Usuario {
 	private Long id;
 
 	
-	@NotNull(message = "O nome é obrigatório")
+	@NotBlank(message = "O nome é obrigatório")
+	@Size (min = 3, max = 100, message = "O atributo nome deve conter no mínimo 3 e no máximo 100 caracteres")
 	private String nome;
 
 	
-	@NotNull(message = "O email é obrigatório")
+	@NotBlank(message = "O email é obrigatório")
 	@Email(message = "O usuário deve inserir um email válido")
 	private String usuario;
 
